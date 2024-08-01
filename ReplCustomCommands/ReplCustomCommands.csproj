@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ReplConsole\ReplConsole.csproj" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /y &quot;$(SolutionDir)ReplCustomCommands\bin\$(Configuration)\net8.0\ReplCustomCommands.dll&quot; &quot;$(SolutionDir)ReplConsole\bin\$(Configuration)\net8.0\&quot;&#xA;" />
+  </Target>
+
+</Project>

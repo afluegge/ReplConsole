@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35122.118
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReplConsole", "ReplConsole\ReplConsole.csproj", "{87B0FE4E-3A77-4EB0-B47A-34DA76AE34F0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{55DFA957-E47D-4063-9C27-47C2F1A09113}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build.yml = .github\workflows\build.yml
+		LICENSE.txt = LICENSE.txt
+		README.md = README.md
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReplCustomCommands", "ReplCustomCommands\ReplCustomCommands.csproj", "{7351E5C3-B181-43AA-9615-D951D08BBFF2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{87B0FE4E-3A77-4EB0-B47A-34DA76AE34F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87B0FE4E-3A77-4EB0-B47A-34DA76AE34F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87B0FE4E-3A77-4EB0-B47A-34DA76AE34F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87B0FE4E-3A77-4EB0-B47A-34DA76AE34F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7351E5C3-B181-43AA-9615-D951D08BBFF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7351E5C3-B181-43AA-9615-D951D08BBFF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7351E5C3-B181-43AA-9615-D951D08BBFF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7351E5C3-B181-43AA-9615-D951D08BBFF2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E2465706-6081-4468-B906-C1B7F4A87530}
+	EndGlobalSection
+EndGlobal
