@@ -8,7 +8,7 @@
 /// Each command handler has a unique name and a description, which are used for command identification and help documentation respectively.
 /// The <see cref="Handle"/> method is invoked when the corresponding command is executed in the console.
 /// </remarks>
-internal interface IReplCommandHandler
+public interface IReplCommandHandler
 {
     /// <summary>
     /// Gets the name of the command.

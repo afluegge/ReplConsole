@@ -15,7 +15,7 @@ public class ReplConsoleConfiguration(string environment) : IReplConsoleConfigur
     
     public string Environment         { get; }       = environment;
 
-    public string AppVersion          { get; } = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "<unknown>";
+    public string AppVersion          { get; set; } = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "<unknown>";
 
     public string AppName             { get; set; } = DefaultAppName;
 
@@ -23,5 +23,5 @@ public class ReplConsoleConfiguration(string environment) : IReplConsoleConfigur
 
     public string Prompt              { get; set; }  = ">>";
 
-    public string[] CommandAssemblies { get; } = [];
+    public string[] CommandAssemblies { get; set; } = [];
 }

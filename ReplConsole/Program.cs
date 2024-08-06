@@ -1,4 +1,5 @@
-﻿using ReplConsole.Configuration;
+﻿using ReplConsole.Commands;
+using ReplConsole.Configuration;
 using ReplConsole.Utils;
 using ILogger = Serilog.ILogger;
 
@@ -28,16 +29,16 @@ internal class Program
                                                                 .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
                                                                 .Build();
 
-    private static readonly ILogger _bootstrapLogger    = CreateBootstrapLogger();
-    private static readonly string  _replConsoleVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "<unknown>";
+    private static readonly ILogger _bootstrapLogger = CreateBootstrapLogger();
 
-    
+
     /// <summary>
     /// Initializes a new instance of the <see cref="Program"/> class.
     /// </summary>
     /// <remarks>
     /// This is a protected constructor that is used to prevent the creation of the <see cref="Program"/> class.
     /// </remarks>
+    [ExcludeFromCodeCoverage]
     protected Program()
     {
     }
@@ -51,17 +52,28 @@ internal class Program
     /// </remarks>
     /// <param name="args">The command-line arguments.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-    private static async Task Main(string[] args)
+    [ExcludeFromCodeCoverage]
+    internal static async Task Main(string[] args)
+    {
+        await InternalMain(args, null);
+    }
+
+
+    internal static async Task InternalMain(string[] args, IHostRunner? hostRunner, IServiceProvider? serviceProvider = null)
     {
         _bootstrapLogger.Debug("Starting ReplConsole");
 
-        var host    = ConfigureHost(args);
-        var console = host.Services.GetRequiredService<IReplConsole>();
-        
+        var host = ConfigureHost(args);
+        serviceProvider ??= host.Services;
+
+        var console   = serviceProvider.GetRequiredService<IReplConsole>();
+        var appConfig = serviceProvider.GetRequiredService<IReplConsoleConfiguration>();
+
         var originalTitle = console.Title;
-        console.Title = $"ReplConsole {_replConsoleVersion}";
-        
-        await host.RunAsync();
+        console.Title = $"{appConfig.AppName} {appConfig.AppVersion}";
+
+        hostRunner ??= new HostRunner(host);
+        await hostRunner.RunAsync(CancellationToken.None);
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             console.Title = originalTitle;
@@ -76,7 +88,7 @@ internal class Program
     /// </remarks>
     /// <param name="args">The command-line arguments.</param>
     /// <returns>The configured <see cref="IHost"/>.</returns>
-    private static IHost ConfigureHost(string[] args)
+    internal static IHost ConfigureHost(string[] args)
     {
         var host = Host.CreateDefaultBuilder(args)
             .ConfigureAppConfiguration((hostContext, configApp) =>
@@ -97,6 +109,8 @@ internal class Program
 
                 services.AddSingleton(_ => hostContext.Configuration);
                 services.AddSingleton(appConfig);
+
+                services.AddSingleton<IReplCommandDispatcher, ReplCommandDispatcher>();
                 
                 services.AddSingleton<IReplConsole, ReplConsoleImpl>();
                 services.RegisterCliCommandHandlerTypes();
@@ -130,7 +144,7 @@ internal class Program
     /// <returns>
     /// A <see cref="ILogger"/> instance configured for the <see cref="Program"/> class.
     /// </returns>
-    private static ILogger CreateBootstrapLogger()
+    internal static ILogger CreateBootstrapLogger()
     {
         var loggerConfig = new LoggerConfiguration()
             .ReadFrom.Configuration(_configuration);
