@@ -1,4 +1,5 @@
-﻿using ReplConsole.Commands;
+﻿using System.Diagnostics.CodeAnalysis;
+using ReplConsole.Commands;
 using ReplConsole.Configuration;
 using ReplConsole.Utils;
 
@@ -242,6 +243,7 @@ public class ReplConsoleRunnerTests
 }
 
 
+[ExcludeFromCodeCoverage]
 public class ArrayValueComparer<T> : IEqualityComparer<T[]>
 {
     public bool Equals(T[]? x, T[]? y)

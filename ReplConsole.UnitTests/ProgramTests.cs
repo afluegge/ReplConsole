@@ -3,6 +3,7 @@ using System.Reflection;
 using ReplConsole.Configuration;
 using ReplConsole.Utils;
 using ReplConsole.Commands.Handler;
+using ReplConsole.UnitTests.TestUtils;
 
 namespace ReplConsole.UnitTests;
 
@@ -109,62 +110,19 @@ public class ProgramTests
     [Fact]
     public void RegisterCliCommandHandlerTypes_RegistersExpectedTypes()
     {
-        // Arrange
-        var services = new ServiceCollection();
-        var mockLogger = new Mock<ILogger<ReplCommandDispatcher>>();
-        var mockConfig = new Mock<IReplConsoleConfiguration>();
-        var mockConsole = new Mock<IReplConsole>();
-        var mockAssemblyLoader = new Mock<IAssemblyLoader>();
-        
-        mockConfig.Setup(c => c.CommandAssemblies).Returns(new[] { "TestAssembly" });
-        
-        services.AddSingleton(mockLogger.Object);
-        services.AddSingleton(mockConfig.Object);
-        services.AddSingleton(mockConsole.Object);
-        services.AddSingleton(mockAssemblyLoader.Object);
-        
-        // Add loggers for each command handler
-        services.AddSingleton(new Mock<ILogger<HelloWorldCommandHandler>>().Object);
-        services.AddSingleton(new Mock<ILogger<ExitCommandHandler>>().Object);
-        services.AddSingleton(new Mock<ILogger<ClearConsoleCommandHandler>>().Object);
-        services.AddSingleton(new Mock<ILogger<ReplCommandHandlerImpl>>().Object);
-        
-        // Mock the assembly to return a type that implements IReplCommandHandler and is not CommandHandlerBase
-        var mockAssembly = new Mock<Assembly>();
-        mockAssembly.Setup(a => a.GetTypes()).Returns([typeof(TestMockClass), typeof(ReplCommandHandlerImpl)]);
-        
-        // Setup AssemblyLoader to return our mock assembly
-        mockAssemblyLoader.Setup(a => a.LoadFrom(It.IsAny<string>())).Returns(mockAssembly.Object);
-        
         // Act
-        services.RegisterCliCommandHandlerTypes(mockAssemblyLoader.Object);
-        
+        var serviceProvider = TestHelper.ConfigureMockServiceProvider();
+
         // Assert
-        var serviceProvider = services.BuildServiceProvider();
         
         var registeredHandler = serviceProvider.GetServices<IReplCommandHandler>().ToList();
 
         registeredHandler.Should().Contain(h => h.GetType() == typeof(HelloWorldCommandHandler));
         registeredHandler.Should().Contain(h => h.GetType() == typeof(ExitCommandHandler));
         registeredHandler.Should().Contain(h => h.GetType() == typeof(ClearConsoleCommandHandler));
-        registeredHandler.Should().Contain(h => h.GetType() == typeof(ReplCommandHandlerImpl));
+        registeredHandler.Should().Contain(h => h.GetType() == typeof(TestCommandHandlerImpl));
     }
 }
 
 
 // Dummy implementation of IReplCommandHandler for testing
-public class ReplCommandHandlerImpl : IReplCommandHandler
-{
-    public string Name => "TestCommand";
-    public string Description => "Test command for unit testing";
-    
-    public ValueTask Handle(string[] args, CancellationToken cancellationToken)
-    {
-        return ValueTask.CompletedTask;
-    }
-}
-
-public class TestMockClass
-{
-    public int FooVal { get; set; }
-}
