@@ -51,7 +51,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: TestResults
-        path: ./TestResults/
+        path: ./**/TestResults/
 
     - name: Cache SonarCloud packages
       uses: actions/cache@v3
