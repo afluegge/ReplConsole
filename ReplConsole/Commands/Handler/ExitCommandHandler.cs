@@ -15,7 +15,7 @@ namespace ReplConsole.Commands.Handler;
 /// <param name="console">The <see cref="IReplConsole"/> instance used for interacting with the console.</param>
 /// <param name="config">The <see cref="IReplConsoleConfiguration"/> instance used for accessing configuration settings.</param>
 [UsedImplicitly]
-public class ExitCommandHandler(ILogger<ExitCommandHandler> logger, IReplConsole console, IReplConsoleConfiguration config) : CommandHandlerBase(logger, console)
+public class ExitCommandHandler(ILogger<ExitCommandHandler> logger, IReplConsole console, IReplConsoleConfiguration config, IEnvironment environment) : CommandHandlerBase(logger, console)
 {
     public override string Name => "exit";
     public override string Description => $"Exits {config.AppName}.";
@@ -34,7 +34,7 @@ public class ExitCommandHandler(ILogger<ExitCommandHandler> logger, IReplConsole
     protected override ValueTask HandleCommand(string[] args, CancellationToken cancellationToken)
     {
         ReplConsole.WriteLine("Bye...");
-        Environment.Exit(0);
+        environment.Exit(0);
         return ValueTask.CompletedTask;
     }
 }

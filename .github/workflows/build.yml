@@ -44,13 +44,14 @@ jobs:
     - name: Build and Test
       run: |
         dotnet build --no-restore --configuration Release
-        dotnet test --no-build --verbosity normal --configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./TestResults/coverage/
+        # Important:  Without   --collect:"XPlat Code Coverage"  the coverage report will not be generated.
+        dotnet test --no-build --verbosity normal --configuration Release --collect:"XPlat Code Coverage" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./TestResults/coverage/
 
     - name: Publish test results
       uses: actions/upload-artifact@v3
       with:
         name: TestResults
-        path: ./TestResults/
+        path: ./**/TestResults/
 
     - name: Cache SonarCloud packages
       uses: actions/cache@v3
@@ -80,6 +81,7 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       shell: powershell
       run: |
-        .\.sonar\scanner\dotnet-sonarscanner begin /k:"afluegge_ReplConsole" /o:"afluegge" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/TestResults/coverage/coverage.cobertura.xml"
+        .\.sonar\scanner\dotnet-sonarscanner begin /k:"afluegge_ReplConsole" /o:"afluegge" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/coverage.cobertura.xml"
         dotnet build --no-restore --configuration Release
+        dotnet test --no-build --verbosity normal --configuration Release --collect:"XPlat Code Coverage" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./TestResults/coverage/
         .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
