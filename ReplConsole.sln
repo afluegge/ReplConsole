@@ -21,7 +21,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHub Wiki", "GitHub Wiki"
 		..\wiki\Home.md = ..\wiki\Home.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReplConsole.UnitTests", "ReplConsole.UnitTests\ReplConsole.UnitTests.csproj", "{005C6E0E-408B-4D9C-8465-6F9558B6CD8B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReplConsole.UnitTests", "ReplConsole.UnitTests\ReplConsole.UnitTests.csproj", "{005C6E0E-408B-4D9C-8465-6F9558B6CD8B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReplCustomCommands.UnitTests", "ReplCustomCommands.UnitTests\ReplCustomCommands.UnitTests.csproj", "{81B5D736-2230-4576-9D52-9FD6BE3A77CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{005C6E0E-408B-4D9C-8465-6F9558B6CD8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{005C6E0E-408B-4D9C-8465-6F9558B6CD8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{005C6E0E-408B-4D9C-8465-6F9558B6CD8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81B5D736-2230-4576-9D52-9FD6BE3A77CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81B5D736-2230-4576-9D52-9FD6BE3A77CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81B5D736-2230-4576-9D52-9FD6BE3A77CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81B5D736-2230-4576-9D52-9FD6BE3A77CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

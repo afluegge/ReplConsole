@@ -2,12 +2,19 @@
 using ReplConsole.Commands;
 using ReplConsole.Commands.Handler;
 using ReplConsole.Configuration;
-using ReplConsole.UnitTests.Commands.Handler;
 using ReplConsole.UnitTests.TestUtils;
 using ReplConsole.Utils;
+using ReplConsole.Utils.WindowsConsole;
 
 namespace ReplConsole.UnitTests.Commands;
 
+[SupportedOSPlatform("windows")]
+[UnsupportedOSPlatform("android")]
+[UnsupportedOSPlatform("browser")]
+[UnsupportedOSPlatform("ios")]
+[UnsupportedOSPlatform("tvos")]
+[UnsupportedOSPlatform("linux")]
+[UnsupportedOSPlatform("macos")]
 public class ReplCommandDispatcherTests
 {
     private readonly Mock<IReplConsole>    _mockConsole;
@@ -35,6 +42,9 @@ public class ReplCommandDispatcherTests
         
         var serviceProvider = TestHelper.ConfigureMockServiceProvider(services =>
         {
+            services.AddSingleton<IEnvironment, WindowsEnvironmentImpl>();
+            services.AddSingleton<IConsole, WindowsConsoleImpl>();
+            
             services.AddSingleton(new Mock<ILogger<MockCommandHandler>>().Object);
             services.AddSingleton<IReplCommandHandler, MockCommandHandler>();
         });

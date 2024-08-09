@@ -1,7 +1,7 @@
 ﻿using ReplConsole.Commands;
 using ReplConsole.Utils;
 
-namespace ReplConsole.UnitTests.Commands.Handler;
+namespace ReplConsole.UnitTests.TestUtils;
 
 public class MockCommandHandler(ILogger<MockCommandHandler> logger, IReplConsole console) : CommandHandlerBase(logger, console)
 {
@@ -10,14 +10,14 @@ public class MockCommandHandler(ILogger<MockCommandHandler> logger, IReplConsole
     public CancellationToken ReceivedCancellationToken { get; private set; }
 
 
-    public override string Name        => "MockCommand";
+    public override string Name => "MockCommand";
     public override string Description => "Mock command for testing";
 
 
     protected override ValueTask HandleCommand(string[] args, CancellationToken cancellationToken)
     {
-        HandleCommandCalled       = true;
-        ReceivedArgs              = args;
+        HandleCommandCalled = true;
+        ReceivedArgs = args;
         ReceivedCancellationToken = cancellationToken;
 
         return ValueTask.CompletedTask;

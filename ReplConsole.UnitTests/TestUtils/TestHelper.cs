@@ -3,9 +3,17 @@ using ReplConsole.Commands;
 using ReplConsole.Commands.Handler;
 using ReplConsole.Configuration;
 using ReplConsole.Utils;
+using ReplConsole.Utils.WindowsConsole;
 
 namespace ReplConsole.UnitTests.TestUtils;
 
+[SupportedOSPlatform("windows")]
+[UnsupportedOSPlatform("android")]
+[UnsupportedOSPlatform("browser")]
+[UnsupportedOSPlatform("ios")]
+[UnsupportedOSPlatform("tvos")]
+[UnsupportedOSPlatform("linux")]
+[UnsupportedOSPlatform("macos")]
 internal static class TestHelper
 {
     public static ServiceProvider ConfigureMockServiceProvider(Action<ServiceCollection>? addServices = null)
@@ -29,7 +37,11 @@ internal static class TestHelper
         services.AddSingleton(new Mock<ILogger<ClearConsoleCommandHandler>>().Object);
         services.AddSingleton(new Mock<ILogger<TestCommandHandlerImpl>>().Object);
 
-        
+        services.AddSingleton<IEnvironment, WindowsEnvironmentImpl>();
+        services.AddSingleton<IConsole, WindowsConsoleImpl>();
+
+
+
         // Give the caller a chance to register additional services
         addServices?.Invoke(services);
 

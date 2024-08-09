@@ -1,4 +1,4 @@
-﻿using ReplConsole.UnitTests.Commands.Handler;
+﻿using ReplConsole.UnitTests.TestUtils;
 using ReplConsole.Utils;
 
 namespace ReplConsole.UnitTests.Commands;

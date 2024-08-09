@@ -1,6 +1,7 @@
 ﻿using ReplConsole.Commands;
 using ReplConsole.Configuration;
 using ReplConsole.Utils;
+using ReplConsole.Utils.WindowsConsole;
 using ILogger = Serilog.ILogger;
 
 namespace ReplConsole;
@@ -112,6 +113,8 @@ internal class Program
 
                 services.AddSingleton<IReplCommandDispatcher, ReplCommandDispatcher>();
                 
+                services.AddSingleton<IEnvironment, WindowsEnvironmentImpl>();
+                services.AddSingleton<IConsole, WindowsConsoleImpl>();
                 services.AddSingleton<IReplConsole, ReplConsoleImpl>();
                 services.RegisterCliCommandHandlerTypes();
 

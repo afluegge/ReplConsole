@@ -26,7 +26,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\ReplConsole\ReplConsole.csproj" />
+      <ProjectReference Include="..\ReplConsole\ReplConsole.csproj" />
+      <ProjectReference Include="..\ReplCustomCommands\ReplCustomCommands.csproj" />
     </ItemGroup>
 
     <ItemGroup>
