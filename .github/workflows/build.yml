@@ -44,6 +44,7 @@ jobs:
     - name: Build and Test
       run: |
         dotnet build --no-restore --configuration Release
+        # Important:  Without   --collect:"XPlat Code Coverage"  the coverage report will not be generated.
         dotnet test --no-build --verbosity normal --configuration Release --collect:"XPlat Code Coverage" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./TestResults/coverage/
 
     - name: Publish test results
