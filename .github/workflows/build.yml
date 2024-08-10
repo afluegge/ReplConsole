@@ -14,7 +14,10 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - run: echo "::notice 🎉 The job was automatically triggered by a ${{ github.event_name }} event. Root folder for this workflow is ${{ github.workspace }}"
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
       - name: Setup .NET 8.0 SDK
         uses: actions/setup-dotnet@v3
@@ -42,11 +45,6 @@ jobs:
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
 
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-
       - name: Restore project dependencies
         run: dotnet restore
 
@@ -56,14 +54,12 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"afluegge_ReplConsole" /o:"afluegge" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverageReportPaths="**/coverage.cobertura.xml"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"afluegge_ReplConsole" /o:"afluegge" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths="**/coverage.cobertura.xml"
 
       - name: Build and Test
         run: |
           dotnet build --no-restore --configuration Release
-          # Important:  Without   --collect:"XPlat Code Coverage"  the coverage report will not be generated.
           dotnet test --no-build --verbosity normal --configuration Release --collect:"XPlat Code Coverage" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./TestResults/coverage/
-
 
       - name: Complete SonarCloud analysis
         env:
