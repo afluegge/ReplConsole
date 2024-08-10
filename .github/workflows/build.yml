@@ -12,9 +12,6 @@ jobs:
   build:
     name: Build, Test and Analyze
     runs-on: windows-latest
-    strategy:
-      matrix:
-        test: ['ReplConsole.UnitTests', 'ReplCustomCommands.UnitTests']
 
     steps:
       - name: Checkout repository
@@ -67,12 +64,10 @@ jobs:
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"afluegge_ReplConsole" /o:"afluegge" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
 
-      - name: Build
-        run: dotnet build --no-restore --configuration Release
-
-      - name: Test
+      - name: Build and Test
         run: |
-          dotnet test --no-build --verbosity normal --configuration Release --collect:"XPlat Code Coverage" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./TestResults/coverage/ ${{ matrix.test }}
+          dotnet build --no-restore --configuration Release
+          dotnet test --no-build --verbosity normal --configuration Release --collect:"XPlat Code Coverage" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./TestResults/coverage/
 
       - name: Complete SonarCloud analysis
         env:
