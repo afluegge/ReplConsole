@@ -6,7 +6,7 @@ namespace ReplConsole.Commands;
 /// <summary>
 /// Manages the dispatching of commands in a REPL (Read-Evaluate-Print Loop) console application.
 /// </summary>
-internal class ReplCommandDispatcher
+internal class ReplCommandDispatcher : IReplCommandDispatcher
 {
     private readonly ILogger<ReplCommandDispatcher>          _logger;
     private readonly IReplConsole                            _console;

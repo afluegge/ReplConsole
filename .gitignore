@@ -363,3 +363,6 @@ MigrationBackup/
 FodyWeavers.xsd
 
 .idea/
+
+/log*.txt
+/.github/workflows/build.yml.original

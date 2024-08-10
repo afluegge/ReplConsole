@@ -11,6 +11,11 @@
 public interface IReplConsoleConfiguration
 {
     /// <summary>
+    /// Gets the environment for the REPL console application.
+    /// </summary>
+    string Environment { get; }
+    
+    /// <summary>
     /// Gets the version of the application.
     /// </summary>
     /// <value>The version of the application.</value>

@@ -7,13 +7,22 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReplConsole", "ReplConsole\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{55DFA957-E47D-4063-9C27-47C2F1A09113}"
 	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
 		.github\workflows\build.yml = .github\workflows\build.yml
+		.github\workflows\build.yml.original = .github\workflows\build.yml.original
 		LICENSE.txt = LICENSE.txt
 		README.md = README.md
-		.gitignore = .gitignore
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReplCustomCommands", "ReplCustomCommands\ReplCustomCommands.csproj", "{7351E5C3-B181-43AA-9615-D951D08BBFF2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHub Wiki", "GitHub Wiki", "{15336E52-4346-4740-B2D3-6FE386BA3BEB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReplConsole.UnitTests", "ReplConsole.UnitTests\ReplConsole.UnitTests.csproj", "{005C6E0E-408B-4D9C-8465-6F9558B6CD8B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReplCustomCommands.UnitTests", "ReplCustomCommands.UnitTests\ReplCustomCommands.UnitTests.csproj", "{81B5D736-2230-4576-9D52-9FD6BE3A77CA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{0E688B90-862E-47D0-8DAE-84100D3BAA98}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,9 +38,21 @@ Global
 		{7351E5C3-B181-43AA-9615-D951D08BBFF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7351E5C3-B181-43AA-9615-D951D08BBFF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7351E5C3-B181-43AA-9615-D951D08BBFF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{005C6E0E-408B-4D9C-8465-6F9558B6CD8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{005C6E0E-408B-4D9C-8465-6F9558B6CD8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{005C6E0E-408B-4D9C-8465-6F9558B6CD8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{005C6E0E-408B-4D9C-8465-6F9558B6CD8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81B5D736-2230-4576-9D52-9FD6BE3A77CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81B5D736-2230-4576-9D52-9FD6BE3A77CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81B5D736-2230-4576-9D52-9FD6BE3A77CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81B5D736-2230-4576-9D52-9FD6BE3A77CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{005C6E0E-408B-4D9C-8465-6F9558B6CD8B} = {0E688B90-862E-47D0-8DAE-84100D3BAA98}
+		{81B5D736-2230-4576-9D52-9FD6BE3A77CA} = {0E688B90-862E-47D0-8DAE-84100D3BAA98}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E2465706-6081-4468-B906-C1B7F4A87530}

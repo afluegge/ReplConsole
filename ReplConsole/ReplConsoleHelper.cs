@@ -25,11 +25,16 @@ internal static class ReplConsoleHelper
     /// - If an assembly fails to load, an error is logged.
     /// </remarks>
     /// <param name="services">The <see cref="IServiceCollection"/> to which the CLI command handler types are registered.</param>
-    public static void RegisterCliCommandHandlerTypes(this IServiceCollection services)
+    /// <param name="assemblyLoader">
+    /// The <see cref="IAssemblyLoader"/> to use for loading assemblies. If <c langword="null"/>, the default implementation is used.
+    /// Can be used for unit testing.
+    /// </param>
+    public static void RegisterCliCommandHandlerTypes(this IServiceCollection services, IAssemblyLoader? assemblyLoader = null)
     {
-        // ToDo: The logger retrieved here does use a different output template than all other logger in the solution.
-        
-        
+        // If no IAssemblyLoader is provided, use the default implementation
+        assemblyLoader ??= new AssemblyLoader();
+
+
         var serviceProvider = services.BuildServiceProvider();
         var logger          = serviceProvider.GetRequiredService<ILogger<ReplCommandDispatcher>>();
         var config          = serviceProvider.GetRequiredService<IReplConsoleConfiguration>();
@@ -58,7 +63,7 @@ internal static class ReplConsoleHelper
 
             try
             {
-                var commandAssembly = Assembly.LoadFrom(assemblyPath);
+                var commandAssembly = assemblyLoader.LoadFrom(assemblyPath);
                 var commandTypes = commandAssembly.GetTypes();
 
                 foreach (var type in commandTypes)
@@ -78,5 +83,21 @@ internal static class ReplConsoleHelper
                 logger.LogError(ex, "Failed to load assembly '{AssemblyName}' from path '{AssemblyPath}'", assemblyName, assemblyPath);
             }
         }
+    }
+}
+
+
+public interface IAssemblyLoader
+{
+    Assembly LoadFrom(string path);
+}
+
+
+[ExcludeFromCodeCoverage]
+public class AssemblyLoader : IAssemblyLoader
+{
+    public Assembly LoadFrom(string path)
+    {
+        return Assembly.LoadFrom(path);
     }
 }

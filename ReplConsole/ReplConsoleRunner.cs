@@ -20,13 +20,16 @@ namespace ReplConsole;
 [UnsupportedOSPlatform("tvos")]
 [UnsupportedOSPlatform("linux")]
 [UnsupportedOSPlatform("macos")]
-internal class ReplConsoleRunner : BackgroundService
+internal partial class ReplConsoleRunner : BackgroundService
 {
-    private static readonly Regex _regex = new("(?<=\")[^\"]*(?=\")|[^\" ]+");
+    [GeneratedRegex("(?<=\")[^\"]*(?=\")|[^\" ]+")]
+    private static partial Regex MyRegex();
+    
+    private static readonly Regex _regex = MyRegex();
     
     private readonly ILogger<ReplConsoleRunner> _logger;
     private readonly IReplConsole               _console;
-    private readonly ReplCommandDispatcher      _commandDispatcher;
+    private readonly IReplCommandDispatcher     _commandDispatcher;
     private readonly IReplConsoleConfiguration  _appConfig;
 
 
@@ -38,19 +41,18 @@ internal class ReplConsoleRunner : BackgroundService
     /// using the provided parameters and registers the <see cref="OnStarted"/>, <see cref="OnStopping"/>, and <see cref="OnStopped"/> methods to the respective application lifetime events.
     /// </remarks>
     /// <param name="logger">The logger used for logging events in this class.</param>
+    /// <param name="commandDispatcher">The command dispatcher used for dispatching commands to their respective handlers.</param>
     /// <param name="console">The console used for input and output operations.</param>
     /// <param name="appConfig">The configuration settings for the REPL console.</param>
     /// <param name="appLifetime">The application lifetime used for managing application start and stop events.</param>
     /// <param name="loggerFactory">The logger factory used for creating loggers.</param>
     /// <param name="serviceProvider">The service provider used for dependency injection.</param>
-    public ReplConsoleRunner(ILogger<ReplConsoleRunner> logger, IReplConsole console, IReplConsoleConfiguration appConfig, IHostApplicationLifetime appLifetime, ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
+    public ReplConsoleRunner(ILogger<ReplConsoleRunner> logger, IReplCommandDispatcher commandDispatcher, IReplConsole console, IReplConsoleConfiguration appConfig, IHostApplicationLifetime appLifetime, ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
     {
-        _logger    = logger;
-        _console   = console;
-        _appConfig = appConfig;
-
-        var dispatcherLogger = loggerFactory.CreateLogger<ReplCommandDispatcher>();
-        _commandDispatcher = new ReplCommandDispatcher(dispatcherLogger, appConfig, console, serviceProvider);
+        _logger            = logger;
+        _console           = console;
+        _appConfig         = appConfig;
+        _commandDispatcher = commandDispatcher;
 
         appLifetime.ApplicationStarted.Register(OnStarted);
         appLifetime.ApplicationStopping.Register(OnStopping);
