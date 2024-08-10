@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		.github\workflows\build.yml = .github\workflows\build.yml
+		.github\workflows\build.yml.original = .github\workflows\build.yml.original
 		LICENSE.txt = LICENSE.txt
 		README.md = README.md
 	EndProjectSection
@@ -19,7 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHub Wiki", "GitHub Wiki"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReplConsole.UnitTests", "ReplConsole.UnitTests\ReplConsole.UnitTests.csproj", "{005C6E0E-408B-4D9C-8465-6F9558B6CD8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReplCustomCommands.UnitTests", "ReplCustomCommands.UnitTests\ReplCustomCommands.UnitTests.csproj", "{81B5D736-2230-4576-9D52-9FD6BE3A77CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReplCustomCommands.UnitTests", "ReplCustomCommands.UnitTests\ReplCustomCommands.UnitTests.csproj", "{81B5D736-2230-4576-9D52-9FD6BE3A77CA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{0E688B90-862E-47D0-8DAE-84100D3BAA98}"
 EndProject
