@@ -1,5 +1,4 @@
 using ReplConsole.Commands;
-using System.Reflection;
 using ReplConsole.Configuration;
 using ReplConsole.Utils;
 using ReplConsole.Commands.Handler;
@@ -120,7 +119,6 @@ public class ProgramTests
         registeredHandler.Should().Contain(h => h.GetType() == typeof(HelloWorldCommandHandler));
         registeredHandler.Should().Contain(h => h.GetType() == typeof(ExitCommandHandler));
         registeredHandler.Should().Contain(h => h.GetType() == typeof(ClearConsoleCommandHandler));
-        registeredHandler.Should().Contain(h => h.GetType() == typeof(TestCommandHandlerImpl));
     }
 }
 

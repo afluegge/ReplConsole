@@ -1,5 +1,6 @@
 ﻿using ReplConsole.Commands;
 using ReplConsole.Configuration;
+using ReplConsole.Utils;
 
 namespace ReplConsole;
 
@@ -34,70 +35,46 @@ internal static class ReplConsoleHelper
         // If no IAssemblyLoader is provided, use the default implementation
         assemblyLoader ??= new AssemblyLoader();
 
+        var serviceProvider             = services.BuildServiceProvider();
+        var logger                      = serviceProvider.GetRequiredService<ILogger<ReplCommandDispatcher>>();
+        var assembly                    = Assembly.GetExecutingAssembly();
+        var executingAssemblyPath       = Path.GetDirectoryName(assembly.Location) ?? string.Empty;
+        var commandHandlerInterfaceType = typeof(IReplCommandHandler);
+        var commandHandlerTypes         = new List<Type>();
 
-        var serviceProvider = services.BuildServiceProvider();
-        var logger          = serviceProvider.GetRequiredService<ILogger<ReplCommandDispatcher>>();
-        var config          = serviceProvider.GetRequiredService<IReplConsoleConfiguration>();
-        var assembly        = Assembly.GetExecutingAssembly();
+        var assemblyFileNames = Directory.GetFiles(executingAssemblyPath, "*.dll");
 
-        var types = assembly.GetTypes();
-
-        foreach (var type in types)
+        foreach (var assemblyFileName in assemblyFileNames)
         {
-            var cliCommandType = type.GetInterface("IReplCommandHandler");
-
-            if (cliCommandType == null || type == typeof(CommandHandlerBase))
-                continue;
-
-            logger.LogDebug(HandlerTypeAddedMessage, type.FullName);
-
-            services.AddScoped(cliCommandType, type); // Register by interface
-        }
-
-        // Load and scan assemblies listed in "CommandAssemblies"
-        var executingAssemblyPath = Path.GetDirectoryName(assembly.Location) ?? string.Empty;
-        
-        foreach (var assemblyName in config.CommandAssemblies)
-        {
-            var assemblyPath = Path.Combine(executingAssemblyPath, $"{assemblyName}.dll");
-
             try
             {
-                var commandAssembly = assemblyLoader.LoadFrom(assemblyPath);
-                var commandTypes = commandAssembly.GetTypes();
+                assembly = assemblyLoader.LoadFrom(assemblyFileName);
 
-                foreach (var type in commandTypes)
-                {
-                    var cliCommandType = type.GetInterface("IReplCommandHandler");
+                // Check if the assembly has the CommandAssemblyAttribute
+                if (!assembly.GetCustomAttributes<ReplCommandsAssemblyAttribute>().Any())
+                    continue;
 
-                    if (cliCommandType == null || type == typeof(CommandHandlerBase))
-                        continue;
+                var assemblyTypes = assembly.GetTypes()
+                    .Where(t => commandHandlerInterfaceType.IsAssignableFrom(t) && t is { IsClass: true, IsAbstract: false });
 
-                    logger.LogDebug(HandlerTypeAddedMessage, type.FullName);
-
-                    services.AddScoped(cliCommandType, type); // Register by interface
-                }
+                commandHandlerTypes.AddRange(assemblyTypes);
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                // Handle the exception if needed
+                logger.LogError("Error loading types from assembly {AssemblyFileName}: {ExceptionMessage}", assemblyFileName, ex.Message);
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Failed to load assembly '{AssemblyName}' from path '{AssemblyPath}'", assemblyName, assemblyPath);
+                // Handle other exceptions if needed
+                logger.LogError("Error loading assembly {AssemblyFileName}: {ExceptionMessage}", assemblyFileName, ex.Message);
             }
         }
-    }
-}
 
-
-public interface IAssemblyLoader
-{
-    Assembly LoadFrom(string path);
-}
-
-
-[ExcludeFromCodeCoverage]
-public class AssemblyLoader : IAssemblyLoader
-{
-    public Assembly LoadFrom(string path)
-    {
-        return Assembly.LoadFrom(path);
+        foreach (var commandHandlerType in commandHandlerTypes)
+        {
+            logger.LogDebug(HandlerTypeAddedMessage, commandHandlerType.FullName);
+            services.AddScoped(commandHandlerInterfaceType, commandHandlerType);
+        }
     }
 }

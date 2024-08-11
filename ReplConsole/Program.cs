@@ -24,13 +24,13 @@ internal class Program
 {
     private const string EnvPrefix = "REPLCLI_";
 
-    private static readonly IConfiguration _configuration = new ConfigurationBuilder()
-                                                                .SetBasePath(Directory.GetCurrentDirectory())
-                                                                .AddJsonFile("appsettings.json", optional: false)
-                                                                .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
-                                                                .Build();
+    private static readonly IConfiguration Configuration = new ConfigurationBuilder()
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile("appsettings.json", optional: false)
+        .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
+        .Build();
 
-    private static readonly ILogger _bootstrapLogger = CreateBootstrapLogger();
+    private static readonly ILogger BootstrapLogger = CreateBootstrapLogger();
 
 
     /// <summary>
@@ -62,7 +62,7 @@ internal class Program
 
     internal static async Task InternalMain(string[] args, IHostRunner? hostRunner, IServiceProvider? serviceProvider = null)
     {
-        _bootstrapLogger.Debug("Starting ReplConsole");
+        BootstrapLogger.Debug("Starting ReplConsole");
 
         var host = ConfigureHost(args);
         serviceProvider ??= host.Services;
@@ -150,7 +150,7 @@ internal class Program
     internal static ILogger CreateBootstrapLogger()
     {
         var loggerConfig = new LoggerConfiguration()
-            .ReadFrom.Configuration(_configuration);
+            .ReadFrom.Configuration(Configuration);
 
         return loggerConfig.CreateBootstrapLogger().ForContext<Program>();
     }
