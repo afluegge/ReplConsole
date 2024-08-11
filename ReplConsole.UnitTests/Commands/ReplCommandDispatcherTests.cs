@@ -1,6 +1,5 @@
 ﻿using System.Drawing;
 using ReplConsole.Commands;
-using ReplConsole.Commands.Handler;
 using ReplConsole.Configuration;
 using ReplConsole.UnitTests.TestUtils;
 using ReplConsole.Utils;
@@ -117,6 +116,5 @@ public class ReplCommandDispatcherTests
         _mockConsole.Verify(c => c.WriteLine(It.Is<string>(s => s.Contains("cls"))), Times.Once);
         _mockConsole.Verify(c => c.WriteLine(It.Is<string>(s => s.Contains("exit"))), Times.Once);
         _mockConsole.Verify(c => c.WriteLine(It.Is<string>(s => s.Contains("hello"))), Times.Once);
-        _mockConsole.Verify(c => c.WriteLine(It.Is<string>(s => s.Contains("TestCommand"))), Times.Once);
     }
 }

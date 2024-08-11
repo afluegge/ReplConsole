@@ -18,13 +18,13 @@ internal static class TestHelper
 {
     public static ServiceProvider ConfigureMockServiceProvider(Action<ServiceCollection>? addServices = null)
     {
-        var services = new ServiceCollection();
-        var mockLogger = new Mock<ILogger<ReplCommandDispatcher>>();
-        var mockConfig = new Mock<IReplConsoleConfiguration>();
-        var mockConsole = new Mock<IReplConsole>();
+        var services           = new ServiceCollection();
+        var mockLogger         = new Mock<ILogger<ReplCommandDispatcher>>();
+        var mockConfig         = new Mock<IReplConsoleConfiguration>();
+        var mockConsole        = new Mock<IReplConsole>();
         var mockAssemblyLoader = new Mock<IAssemblyLoader>();
 
-        mockConfig.Setup(c => c.CommandAssemblies).Returns(new[] { "TestAssembly" });
+        mockConfig.Setup(c => c.CommandAssemblies).Returns(["TestAssembly"]);
 
         services.AddSingleton(mockLogger.Object);
         services.AddSingleton(mockConfig.Object);
@@ -40,13 +40,15 @@ internal static class TestHelper
         services.AddSingleton<IEnvironment, WindowsEnvironmentImpl>();
         services.AddSingleton<IConsole, WindowsConsoleImpl>();
 
-
+        services.AddSingleton<IReplCommandHandler, HelloWorldCommandHandler>();
+        services.AddSingleton<IReplCommandHandler, ExitCommandHandler>();
+        services.AddSingleton<IReplCommandHandler, ClearConsoleCommandHandler>();
 
         // Give the caller a chance to register additional services
         addServices?.Invoke(services);
 
 
-        // Mock the assembly to return a type that implements IReplCommandHandler and is not CommandHandlerBase
+        // Mock the assembly to return a type that implements IReplCommandHandler
         var mockAssembly = new Mock<Assembly>();
         mockAssembly.Setup(a => a.GetTypes()).Returns([typeof(TestMockClass), typeof(TestCommandHandlerImpl)]);
 
